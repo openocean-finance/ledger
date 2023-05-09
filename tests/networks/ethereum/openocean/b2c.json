@@ -1,0 +1,39 @@
+{
+    "chainId": 1,
+    "contracts": [
+        {
+            "address": "0x6352a56caadc4f1e25cd6c75970fa768a3304e64",
+            "contractName": "ExchangeV2",
+            "selectors": {
+                "0x90411a32": {
+                    "erc20OfInterest": [
+                        "desc.srcToken",
+                        "desc.dstToken"
+                    ],
+                    "method": "swap",
+                    "plugin": "openocean"
+                },
+                "0x8980041a": {
+                    "erc20OfInterest": [
+                        "srcToken"
+                    ],
+                    "method": "callUniswap",
+                    "plugin": "openocean"
+                },
+                "0x6b58f2f0": {
+                    "erc20OfInterest": [
+                        "srcToken"
+                    ],
+                    "method": "callUniswapTo",
+                    "plugin": "openocean"
+                },
+                "0xbc80f1a8": {
+                    "erc20OfInterest": [],
+                    "method": "uniswapV3SwapTo",
+                    "plugin": "openocean"
+                }
+            }
+        }
+    ],
+    "name": "openocean"
+}

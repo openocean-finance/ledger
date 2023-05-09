@@ -1,0 +1,28 @@
+# Compilation of Ledger's app
+src/glyphs.c
+src/glyphs.h
+bin/
+debug/
+dep/
+obj/
+tests/elfs/
+
+# Editors
+.idea/
+
+# Python
+*.pyc[cod]
+*.egg
+__pycache__/
+*.egg-info/
+.eggs/
+.python-version
+
+# JS
+tests/node_modules
+tests/lib
+tests/snapshots-tmp
+
+.devcontainer
+.vscode
+node_modules
