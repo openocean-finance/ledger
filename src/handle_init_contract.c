@@ -38,11 +38,11 @@ void handle_init_contract(void *parameters) {
             context->skip = 3;
             context->next_param = TOKEN_SENT;
             break;
-		case CALL_UNISWAP:
+        case CALL_UNISWAP:
         case CALL_UNISWAP_TO:
             context->next_param = TOKEN_SENT;
             break;
-        case UNISWAP_V3_SWAP_TO:        
+        case UNISWAP_V3_SWAP_TO:
             context->next_param = DST_RECEIVER;
             break;
         default:

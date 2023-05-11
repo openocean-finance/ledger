@@ -10,7 +10,7 @@
 #define RUN_APPLICATION 1
 
 #define NUM_OPEN_OCEAN_SELECTORS 4
-#define SELECTOR_SIZE          4
+#define SELECTOR_SIZE            4
 
 #define PLUGIN_NAME "OpenOcean"
 
@@ -23,17 +23,13 @@ extern const uint8_t OPEN_OCEAN_ETH_ADDRESS[ADDRESS_LENGTH];
 // openocean uses 0x00000 as a dummy address to reprecent ETH in Swap.
 extern const uint8_t NULL_ETH_ADDRESS[ADDRESS_LENGTH];
 
-// Returns 1 if corresponding address is the openocean address for the chain token (ETH, BNB, MATIC, etc.. are 0xeeeee...).
-#define ADDRESS_IS_NETWORK_TOKEN(_addr)                      \
+// Returns 1 if corresponding address is the openocean address for the chain token (ETH, BNB, MATIC,
+// etc.. are 0xeeeee...).
+#define ADDRESS_IS_NETWORK_TOKEN(_addr)                        \
     (!memcmp(_addr, OPEN_OCEAN_ETH_ADDRESS, ADDRESS_LENGTH) || \
      !memcmp(_addr, NULL_ETH_ADDRESS, ADDRESS_LENGTH))
 
-typedef enum {
-    SWAP,
-	CALL_UNISWAP,
-	CALL_UNISWAP_TO,
-	UNISWAP_V3_SWAP_TO	
-} openOceanSelector_t;
+typedef enum { SWAP, CALL_UNISWAP, CALL_UNISWAP_TO, UNISWAP_V3_SWAP_TO } openOceanSelector_t;
 
 #define PARTIAL_FILL 1
 extern const uint8_t *const OPEN_OCEAN_SELECTORS[NUM_OPEN_OCEAN_SELECTORS];
@@ -46,7 +42,8 @@ typedef enum {
     ERROR,
 } screens_t;
 
-// Would've loved to make this an enum but we don't have enough room because enums are `int` and not `uint8_t`.
+// Would've loved to make this an enum but we don't have enough room because enums are `int` and not
+// `uint8_t`.
 #define AMOUNT_SENT     0  // Amount sent by the user to the contract.
 #define AMOUNT_RECEIVED 1  // Amount sent by the contract to the user.
 #define TOKEN_SENT      2  // Address of the token the user is sending.
@@ -54,7 +51,7 @@ typedef enum {
 #define SRC_RECEIVER    4  // Address to which the contract will send the tokens.
 #define DST_RECEIVER    5
 #define FLAGS_PARAM     6
-#define NONE 7  // Placeholder variant to be set when parsing is done but data is still being sent.
+#define NONE            7  // Placeholder variant to be set when parsing is done but data is still being sent.
 
 // Number of decimals used when the token wasn't found in the CAL.
 #define DEFAULT_DECIMAL WEI_TO_ETHER
