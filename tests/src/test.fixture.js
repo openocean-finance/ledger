@@ -25,9 +25,9 @@ const APP_PATH_NANOS = Resolve('elfs/ethereum_nanos.elf');
 const APP_PATH_NANOX = Resolve('elfs/ethereum_nanox.elf');
 const APP_PATH_NANOSP = Resolve('elfs/ethereum_nanosp.elf');
 
-const PLUGIN_LIB_NANOS = { 'openocean': Resolve('elfs/openocean_nanos.elf') };
-const PLUGIN_LIB_NANOX = { 'openocean': Resolve('elfs/openocean_nanox.elf') };
-const PLUGIN_LIB_NANOSP = { 'openocean': Resolve('elfs/openocean_nanosp.elf') };
+const PLUGIN_LIB_NANOS = { 'openocean': Resolve('elfs/plugin_nanos.elf') };
+const PLUGIN_LIB_NANOX = { 'openocean': Resolve('elfs/plugin_nanox.elf') };
+const PLUGIN_LIB_NANOSP = { 'openocean': Resolve('elfs/plugin_nanosp.elf') };
 
 const RANDOM_ADDRESS = "0xaaaabbbbccccddddeeeeffffgggghhhhiiiijjjj";
 
