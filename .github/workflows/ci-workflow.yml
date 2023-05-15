@@ -28,41 +28,17 @@ jobs:
         run: |
           make clean
           make DEBUG=1 BOLOS_SDK=$NANOS_SDK
-          mv bin/app.elf plugin_nanos.elf
+          mv bin/app.elf openocean_nanos.elf
 
       - name: Upload plugin artifact for Nano S
         uses: actions/upload-artifact@v2
         with:
             name: plugin-artifacts
-            path: ./plugin_nanos.elf
+            path: ./openocean_nanos.elf
 
-  job_build_debug_nano_x:
-    name: Build debug Nano X
-    runs-on: ubuntu-latest
-
-    container:
-      image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
-
-    steps:
-      - name: Clone
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
-
-      - name: Build plugin for Nano X
-        run: |
-          make clean
-          make DEBUG=1 BOLOS_SDK=$NANOX_SDK
-          mv bin/app.elf plugin_nanox.elf
-
-      - name: Upload plugin artifact for Nano x
-        uses: actions/upload-artifact@v2
-        with:
-            name: plugin-artifacts
-            path: ./plugin_nanox.elf
 
   jobs-e2e-tests:
-    needs: [job_build_debug_nano_s, job_build_debug_nano_x]
+    needs: [job_build_debug_nano_s]
     runs-on: ubuntu-latest
     steps:
       - name: Test
