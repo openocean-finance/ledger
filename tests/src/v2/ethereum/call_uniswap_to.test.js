@@ -19,7 +19,7 @@ const devices = [
     {
         name: "nanos",
         label: "Nano S",
-        steps: 11, // <= Define the number of steps for this test case and this device
+        steps: 9, // <= Define the number of steps for this test case and this device
     }
 ];
 
