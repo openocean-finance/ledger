@@ -11,7 +11,7 @@ set -e
 build_plugin() {
     # arguments: <SDK letter>
     echo "** Building app-plugin for Nano $1..."
-    local target="$(realpath './elfs/')/openocean_nano${1,,}.elf"
+    local target="$(realpath './elfs/')/plugin_nano${1,,}.elf"
     if [ "$1" == "S" ];
     then
         local sdk=$NANOS_SDK
