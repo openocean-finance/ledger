@@ -28,13 +28,13 @@ jobs:
         run: |
           make clean
           make DEBUG=1 BOLOS_SDK=$NANOS_SDK
-          mv bin/app.elf openocean_nanos.elf
+          mv bin/app.elf plugin_nano.elf
 
       - name: Upload plugin artifact for Nano S
         uses: actions/upload-artifact@v2
         with:
             name: plugin-artifacts
-            path: ./openocean_nanos.elf
+            path: ./plugin_nano.elf
 
 
   jobs-e2e-tests:
