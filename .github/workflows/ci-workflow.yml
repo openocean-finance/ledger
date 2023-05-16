@@ -1,71 +1,25 @@
-name: Compilation & tests
+name: Code style check
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
       - develop
   pull_request:
-    branches:
-      - master
-      - develop
 
 jobs:
-  job_build_debug_nano_s:
-    name: Build debug Nano S
+  job_lint:
+    name: Lint
     runs-on: ubuntu-latest
-
-    container:
-      image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 
     steps:
       - name: Clone
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
+        uses: actions/checkout@v3
 
-      - name: Build plugin for Nano S
-        run: |
-          make clean
-          make DEBUG=1 BOLOS_SDK=$NANOS_SDK
-          mv bin/app.elf openocean_nanos.elf
-
-      - name: Upload plugin artifact for Nano S
-        uses: actions/upload-artifact@v2
+      - name: Lint
+        uses: DoozyX/clang-format-lint-action@v0.15
         with:
-            name: plugin-artifacts
-            path: ./openocean_nanos.elf
-
-
-  jobs-e2e-tests:
-    needs: [job_build_debug_nano_s]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Test
-        run: |
-          id
-          echo $HOME
-          echo $DISPLAY
-      - name: Checkout
-        uses: actions/checkout@v2
-      - run: sudo apt-get update -y && sudo apt-get install -y libusb-1.0.0 libudev-dev
-      - name: Install node
-        uses: actions/setup-node@v2
-        with:
-          node-version: "14.4.0"
-      - name: Install yarn
-        run: |
-          npm install -g yarn
-      - name: Build/Install build js deps
-        run: |
-          cd tests && yarn install
-      - name: Download plugin artifacts
-        uses: actions/download-artifact@v2
-        with:
-            path: tests/elfs
-      - name: Copy plugin artifacts
-        run: |
-            mv tests/elfs/plugin-artifacts/*.elf tests/elfs
-      - name: Run zemu tests
-        run: |
-          cd tests && yarn test
+          source: "./"
+          extensions: "h,c"
+          clangFormatVersion: 12.0.1
