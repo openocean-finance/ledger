@@ -4,7 +4,8 @@ static void handle_amount_sent(ethPluginProvideParameter_t *msg, open_ocean_para
     memcpy(context->amount_sent, msg->parameter, INT256_LENGTH);
 }
 
-static void handle_amount_received(ethPluginProvideParameter_t *msg, open_ocean_parameters_t *context) {
+static void handle_amount_received(ethPluginProvideParameter_t *msg,
+                                   open_ocean_parameters_t *context) {
     memcpy(context->amount_received, msg->parameter, PARAMETER_LENGTH);
 }
 
@@ -24,7 +25,8 @@ static void handle_token_sent(ethPluginProvideParameter_t *msg, open_ocean_param
     printf_hex_array("TOKEN SENT: ", ADDRESS_LENGTH, context->contract_address_sent);
 }
 
-static void handle_token_received(ethPluginProvideParameter_t *msg, open_ocean_parameters_t *context) {
+static void handle_token_received(ethPluginProvideParameter_t *msg,
+                                  open_ocean_parameters_t *context) {
     memset(context->contract_address_received, 0, sizeof(context->contract_address_received));
     memcpy(context->contract_address_received,
            &msg->parameter[PARAMETER_LENGTH - ADDRESS_LENGTH],
@@ -66,7 +68,8 @@ static void handle_swap(ethPluginProvideParameter_t *msg, open_ocean_parameters_
     }
 }
 
-static void handle_call_uniswap(ethPluginProvideParameter_t *msg, open_ocean_parameters_t *context) {
+static void handle_call_uniswap(ethPluginProvideParameter_t *msg,
+                                open_ocean_parameters_t *context) {
     switch (context->next_param) {
         case TOKEN_SENT:
             handle_token_sent(msg, context);
@@ -91,7 +94,8 @@ static void handle_call_uniswap(ethPluginProvideParameter_t *msg, open_ocean_par
     }
 }
 
-static void handle_uniswap_v3_swap_to(ethPluginProvideParameter_t *msg, open_ocean_parameters_t *context) {
+static void handle_uniswap_v3_swap_to(ethPluginProvideParameter_t *msg,
+                                      open_ocean_parameters_t *context) {
     switch (context->next_param) {
         case DST_RECEIVER:
             handle_beneficiary(msg, context);
@@ -117,7 +121,6 @@ static void handle_uniswap_v3_swap_to(ethPluginProvideParameter_t *msg, open_oce
             break;
     }
 }
-
 
 void handle_provide_parameter(void *parameters) {
     ethPluginProvideParameter_t *msg = (ethPluginProvideParameter_t *) parameters;
