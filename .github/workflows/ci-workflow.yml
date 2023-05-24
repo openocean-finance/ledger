@@ -16,7 +16,10 @@ jobs:
         include:
           - sdk: "$NANOS_SDK"
             name: "nanos"
-            
+          - sdk: "$NANOX_SDK"
+            name: "nanox"   
+          - sdk: "$NANOSP_SDK"
+            name: "nanosp"              
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
@@ -38,6 +41,10 @@ jobs:
         include:
           - sdk: "$NANOS_SDK"
             name: "nanos"
+          - sdk: "$NANOX_SDK"
+            name: "nanox"   
+          - sdk: "$NANOSP_SDK"
+            name: "nanosp" 
 
     runs-on: ubuntu-latest
     container:
@@ -70,6 +77,10 @@ jobs:
         include:
           - sdk: "$NANOS_SDK"
             name: "nanos"
+          - sdk: "$NANOX_SDK"
+            name: "nanox"   
+          - sdk: "$NANOSP_SDK"
+            name: "nanosp"             
 
     runs-on: ubuntu-latest
     container:
