@@ -1,8 +1,9 @@
 import Zemu from '@zondax/zemu';
+import { DEFAULT_START_OPTIONS, IDeviceModel } from '@zondax/zemu';
 import Eth from '@ledgerhq/hw-app-eth';
 import { generate_plugin_config } from './generate_plugin_config';
 import { parseEther, parseUnits, RLP } from 'ethers/lib/utils';
-import { ethers } from "ethers";
+import { ethers, UnsignedTransaction } from "ethers";
 import ledgerService from "@ledgerhq/hw-app-eth/lib/services/ledger"
 
 
@@ -12,7 +13,8 @@ export async function waitForAppScreen(sim) {
     await sim.waitUntilScreenIsNot(sim.getMainMenuSnapshot(), transactionUploadDelay);
 }
 
-const simOptions = {
+let simOptions = {
+    ...DEFAULT_START_OPTIONS,
     logging: true,
     X11: false,
     startDelay: 15000,
@@ -25,25 +27,30 @@ const APP_PATH_NANOS = Resolve('elfs/ethereum_nanos.elf');
 const APP_PATH_NANOX = Resolve('elfs/ethereum_nanox.elf');
 const APP_PATH_NANOSP = Resolve('elfs/ethereum_nanosp.elf');
 
-const PLUGIN_LIB_NANOS = { 'openocean': Resolve('elfs/openocean_nanos.elf') };
-const PLUGIN_LIB_NANOX = { 'openocean': Resolve('elfs/openocean_nanox.elf') };
-const PLUGIN_LIB_NANOSP = { 'openocean': Resolve('elfs/openocean_nanosp.elf') };
+const PLUGIN_LIB_NANOS = { 'openocean': Resolve('elfs/plugin_nanos.elf') };
+const PLUGIN_LIB_NANOX = { 'openocean': Resolve('elfs/plugin_nanox.elf') };
+const PLUGIN_LIB_NANOSP = { 'openocean': Resolve('elfs/plugin_nanosp.elf') };
 
 const RANDOM_ADDRESS = "0xaaaabbbbccccddddeeeeffffgggghhhhiiiijjjj";
 
-let genericTx = {
+let genericTx : UnsignedTransaction = {
     nonce: Number(0),
     gasLimit: Number(21000),
     gasPrice: parseUnits("1", "gwei"),
     value: parseEther("1"),
     chainId: 1,
     to: RANDOM_ADDRESS,
-    data: null,
+    data: undefined,
 };
+
 
 let config ;
 
-const TIMEOUT = 2000000;
+beforeAll(async () => {
+  await Zemu.checkAndPullImage();
+});
+
+jest.setTimeout(1000 * 60 * 60);
 
 /**
  * Generates a serializedTransaction from a rawHexTransaction copy pasted from etherscan.
@@ -87,29 +94,28 @@ function txFromEtherscan(rawTx) {
  */
 function zemu(device, func, testNetwork, signed = false) {
     return async () => {
-      jest.setTimeout(TIMEOUT);
-      let eth_path;
-      let plugin;
       let sim_options = simOptions;
+      type model = {dev:IDeviceModel,plugin:any}
+      let current_model: model;
+      
+      const models: model[] = [
+        {dev:{ name : 'nanos', prefix: 'S' , path: APP_PATH_NANOS}, plugin: PLUGIN_LIB_NANOS},
+        {dev:{ name : 'nanox', prefix: 'X' , path: APP_PATH_NANOX}, plugin: PLUGIN_LIB_NANOX},
+        {dev:{ name : 'nanosp', prefix: 'SP' , path: APP_PATH_NANOSP}, plugin: PLUGIN_LIB_NANOSP}
+    ]
 
       if (device === "nanos") {
-        eth_path = APP_PATH_NANOS;
-        plugin = PLUGIN_LIB_NANOS;
-        sim_options.model = "nanos";
+        current_model = models[0]
       } else if (device === "nanox") {
-        eth_path = APP_PATH_NANOX;
-        plugin = PLUGIN_LIB_NANOX;
-        sim_options.model = "nanox";
+        current_model = models[1]
       }else {
-        eth_path = APP_PATH_NANOSP;
-        plugin = PLUGIN_LIB_NANOSP;
-        sim_options.model = "nanosp";
+        current_model = models[2]
       }
 
-      const sim = new Zemu(eth_path, plugin);
+      const sim = new Zemu(current_model.dev.path, current_model.plugin);
 
       try {
-        await sim.start(sim_options);
+        await sim.start({ ...sim_options, model: current_model.dev.name });
         const transport = await sim.getTransport();
         const eth = new Eth(transport);
 
@@ -207,13 +213,9 @@ function populateTransaction(contractAddr, inputData, chainId, value = "0.0") {
     unsignedTx.data = inputData;
     // Modify the number of ETH sent
     unsignedTx.value = parseEther(value);
+    
     // Create serializedTx and remove the "0x" prefix
     return ethers.utils.serializeTransaction(unsignedTx).slice(2);
 }
 
-
-module.exports = {
-    processTest,
-    genericTx,
-    populateTransaction
-};
+export { processTest, genericTx, populateTransaction };

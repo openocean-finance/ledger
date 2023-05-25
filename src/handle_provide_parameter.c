@@ -34,10 +34,6 @@ static void handle_token_received(ethPluginProvideParameter_t *msg,
     printf_hex_array("TOKEN RECEIVED: ", ADDRESS_LENGTH, context->contract_address_received);
 }
 
-static void handle_flags(ethPluginProvideParameter_t *msg, open_ocean_parameters_t *context) {
-    context->flags = msg->parameter[PARAMETER_LENGTH - 1];
-}
-
 static void handle_swap(ethPluginProvideParameter_t *msg, open_ocean_parameters_t *context) {
     switch (context->next_param) {
         case TOKEN_SENT:  // fromToken
